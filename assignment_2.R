@@ -13,7 +13,26 @@ colnames(airbnb)
 neighborhoods <- airbnb %>% count(neighborhood)
 View(neighborhoods)
 #2.2.b
-#Update the neighborhoods tibble from part (a) to get rid of any NA rows in the neighborhood
-#column using the filter function, and then use the arrange and head functions to get the top
-#20 most frequently listed neighborhoods in descending order. Hence, your tibble should have two
-#columns: neighborhood and n, and should have no more than 20 rows.
+?filter
+neighborhoods <- airbnb %>% count(neighborhood) %>% filter(!is.na(neighborhood)) 
+neighborhoods <- neighborhoods %>% arrange(desc(n)) %>% head(20)
+#2.2.c
+airbnb_top_neighborhoods <- airbnb %>% filter(neighborhood %in% neighborhoods$neighborhood)
+View(airbnb_top_neighborhoods)
+#2.2.d
+summary_stats_top_neighborhoods <- airbnb_top_neighborhoods %>%  group_by(neighborhood) %>% 
+  summarize(avg_square_feet = mean(square_feet, na.rm=TRUE),  avg_price = mean(price, na.rm=TRUE),
+            sd_price = sd(price, na.rm=TRUE), max_price = max(price, na.rm=TRUE), min_price = min(price, na.rm=TRUE)) %>%
+            arrange(desc(avg_square_feet))
+#2.2.e
+highest_avg_square_ft <- summary_stats_top_neighborhoods[1,2]
+
+# 2.f.
+second_avg_price <- summary_stats_top_neighborhoods[2,3]
+
+
+
+
+
+
+
